@@ -1,0 +1,52 @@
+{
+  "name": "shopfluencing",
+  "version": "1.0.0",
+  "description": "## Background and Overview Shopping online is becoming a bigger and bigger habit in our lives. The influence of social media advertising has ever increasing importance, especially amongst the millennial generation.  This dataset helps visualize which social media platform has the greatest influence on online shopping decisions by different demographics.",
+  "main": "index.js",
+  "browserslist": [
+    "last 1 version",
+    "> 1%",
+    "maintained node versions",
+    "not dead"
+  ],
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.dev.js",
+    "watch": "webpack --watch --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js  --optimize-minimize"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/betty08300/shopfluencing.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/betty08300/shopfluencing/issues"
+  },
+  "homepage": "https://github.com/betty08300/shopfluencing#readme",
+  "dependencies": {
+    "autoprefixer": "^9.6.1",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "copy-webpack-plugin": "^5.0.4",
+    "css-loader": "^3.2.0",
+    "d3": "^5.9.7",
+    "d3-fetch": "^1.1.2",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "papaparse": "^5.0.2",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.2.0",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.8.0",
+    "webpack-merge": "^4.2.1"
+  },
+  "devDependencies": {
+    "csv-loader": "^3.0.2",
+    "file-loader": "^4.2.0"
+  }
+}
