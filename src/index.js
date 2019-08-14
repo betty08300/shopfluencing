@@ -5,17 +5,7 @@ import * as d3 from 'd3'
 
 const result = {}
 
-// set the dimensions and margins of the graph
-var margin = { top: 20, right: 20, bottom: 30, left: 40 },
-    width = 460 - margin.left - margin.right,
-    height = 200 - margin.top - margin.bottom;
 
-// set the ranges
-var x = d3.scaleBand()
-    .range([0, width])
-    .padding(0.1);
-var y = d3.scaleLinear()
-    .range([height, 0]);
     
 d3.csv('/data/shopfluencing.csv').then(data => {
     data.forEach((row) => {
@@ -32,24 +22,44 @@ d3.csv('/data/shopfluencing.csv').then(data => {
     })
     console.log(result);
 
+    // Build left side with segments
+    buildLeftSide(result);
     
     let ethnicityData = result['Ethnicity'];
     console.log(ethnicityData);
 
-    for (let key in ethnicityData) {
-        let segmentData = ethnicityData[key];
-        buildChart(segmentData)
-    }
+    // Build right side charts
+    buildRightCharts(ethnicityData)
 
-    
+    // TODO: build middle chart
     
 })
 
-var buildChart = function(segmentData) {
+let buildRightCharts = (segmentsData) => {
+    // Build a chart for each subSegment data
+    // ie. Gender segment has Male and Female subsegments
+    for (let subSegment in segmentsData) {
+        buildRightChart(segmentsData[subSegment])
+    }
+}
+
+var buildRightChart = function(subSegmentData) {
+    // set the dimensions and margins of the graph
+    var margin = { top: 20, right: 20, bottom: 30, left: 40 },
+        width = 300 - margin.left - margin.right,
+        height = 180 - margin.top - margin.bottom;
+
+    // set the ranges
+    var x = d3.scaleBand()
+        .range([0, width])
+        .padding(0.1);
+    var y = d3.scaleLinear()
+        .range([height, 0]);
+
     // append the svg object to the body of the page
     // append a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select(".right-side").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -57,15 +67,14 @@ var buildChart = function(segmentData) {
             "translate(" + margin.left + "," + margin.top + ")");
 
     let chartData = [];
-    for (let platform in segmentData) {
-        let count = segmentData[platform];
+    for (let platform in subSegmentData) {
+        let count = subSegmentData[platform];
         let obj = {
             'platformName': platform,
             'count': count
         }
         chartData.push(obj);
     }
-
 
     // format the data
     chartData.forEach(function (d) {
@@ -96,9 +105,30 @@ var buildChart = function(segmentData) {
         .call(d3.axisLeft(y));
 }
 
+let buildLeftSide = function(result) {
+    let segmentsArr = Object.keys(result);
+    let leftSideContainer = document.getElementsByClassName('left-side')[0];
 
+    for (let i = 0; i < segmentsArr.length; i++) {
+        let label = segmentsArr[i];
 
+        // Create child div
+        let div = document.createElement('div');
+        div.className = 'segment-label';
+        // Set onclick handler for each div
+        div.onclick = function() { handleSegmentClick(result[label]) }
+        let textNode = document.createTextNode(label);
+        div.appendChild(textNode);
 
+        // Append div to left side container
+        leftSideContainer.appendChild(div)
+    }
+}
 
-
-
+let handleSegmentClick = function(segmentsData) {
+    console.log(segmentsData);
+    // Remove all child svg charts inside the right-side div
+    d3.select(".right-side").selectAll('svg').remove();
+    // Rebuild charts for segmentsData
+    buildRightCharts(segmentsData)
+}

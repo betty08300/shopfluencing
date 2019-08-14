@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+}
+
+.left-side {
+    width: 20%;
+    padding: 12px;
+}
+
+.middle-side {
+    width: 50%;
+}
+
+.right-side {
+    width: 30%;
+}
+
+.segment-label {
+    background: #eeeeee;
+    border-radius: 50px;
+    color: #444;
+    margin-bottom: 12px;
+    padding: 12px;
+    text-align: center;
+}
