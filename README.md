@@ -21,3 +21,5 @@ This dataset helps visualize which social media platform has the greatest influe
 * Learn d3.js and find visualizations that will be used (day 3)
 * Implement the data visualization (day 4)
 * Style and deploy to github pages (day 5)
+
+<img src='./data/wireframe.png'>
