@@ -30,7 +30,7 @@ module.exports = {
                         options: {
                             // you can specify a publicPath here
                             // by default it uses publicPath in webpackOptions.output
-                            publicPath: "../",
+                            publicPath: path.join(__dirname, './src'),
                             hmr: process.env.NODE_ENV === "development"
                         }
                     },
@@ -39,14 +39,14 @@ module.exports = {
                 ]
             },
             {
-                test: /\.scss/,
+                test: /\.scss$/,
                 use: [
                     {
                         loader: MiniCssExtractPlugin.loader,
                         options: {
                             // you can specify a publicPath here
                             // by default it uses publicPath in webpackOptions.output
-                            publicPath: "../",
+                            publicPath: path.join(__dirname, './src'),
                             hmr: process.env.NODE_ENV === "development"
                         }
                     },
