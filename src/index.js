@@ -32,7 +32,7 @@ d3.csv('/data/shopfluencing.csv').then(dataArr => {
     // Build right side charts
     buildRightCharts(startingData)
 
-    // PieAPI.buildPieChart(startingData['Male voters'])
+    PieAPI.buildPieChart(startingData['Male voters'])
 
     GraphApI.buildgraph(result)
 
