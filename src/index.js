@@ -182,8 +182,8 @@ let buildPieChart = function (dataObj) {
     
     console.log(dataObj);
     // set the dimensions and margins of the graph
-    var width = 800,
-        height = 800,
+    var width = 700,
+        height = 700,
         margin = 40
 
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
