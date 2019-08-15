@@ -8,7 +8,7 @@ import * as GraphApI from './graph';
 
 const result = {}
 
-d3.csv('/data/shopfluencing.csv').then(dataArr => {
+d3.csv('./dist/shopfluencing.csv').then(dataArr => {
     dataArr.forEach((row) => {
         // debugger
         let segmentType = row['Segment Type'];
