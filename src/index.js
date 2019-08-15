@@ -1,14 +1,13 @@
 // const svg = d3.select('svg');
 // svg.style('background-color', 'orange');
 import * as d3 from 'd3'
+import '../src/scss/index.scss'
 
 
 const result = {}
 
-
-    
-d3.csv('/data/shopfluencing.csv').then(data => {
-    data.forEach((row) => {
+d3.csv('/data/shopfluencing.csv').then(dataArr => {
+    dataArr.forEach((row) => {
         // debugger
         let segmentType = row['Segment Type'];
         let segmentDescription = row['Segment Description'];
@@ -24,28 +23,31 @@ d3.csv('/data/shopfluencing.csv').then(data => {
 
     // Build left side with segments
     buildLeftSide(result);
-    
-    let ethnicityData = result['Ethnicity'];
-    console.log(ethnicityData);
+
+    let startingData = result['Gender'];
+    // console.log(startingData);
 
     // Build right side charts
-    buildRightCharts(ethnicityData)
+    buildRightCharts(startingData)
 
-    // TODO: build middle chart
+    buildPieChart(startingData['Male voters'])
 
-    buildPieCharts(platform)
-    
 })
 
 let buildRightCharts = (segmentsData) => {
+    // {
+    //     'Male voters': {fb: 10, ig:20},
+    //     'Female voters': 432
+    // }
+
     // Build a chart for each subSegment data
     // ie. Gender segment has Male and Female subsegments
-    for (let subSegment in segmentsData) {
-        buildRightChart(segmentsData[subSegment])
+    for (let subSegmentTitle in segmentsData) {
+        buildRightChart(subSegmentTitle, segmentsData[subSegmentTitle])
     }
 }
 
-var buildRightChart = function(subSegmentData) {
+var buildRightChart = function (title, subSegmentData) {
     // set the dimensions and margins of the graph
     var margin = { top: 20, right: 20, bottom: 30, left: 40 },
         width = 300 - margin.left - margin.right,
@@ -67,6 +69,12 @@ var buildRightChart = function(subSegmentData) {
         .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.append('text')
+        .attr('x', (width / 2))
+        .attr('y', 0)
+        .attr('text-anchor', 'middle')
+        .text(title)
 
     let chartData = [];
     for (let platform in subSegmentData) {
@@ -107,7 +115,7 @@ var buildRightChart = function(subSegmentData) {
         .call(d3.axisLeft(y));
 }
 
-let buildLeftSide = function(result) {
+let buildLeftSide = function (result) {
     let segmentsArr = Object.keys(result);
     let leftSideContainer = document.getElementsByClassName('left-side')[0];
 
@@ -117,63 +125,125 @@ let buildLeftSide = function(result) {
         // Create child div
         let div = document.createElement('div');
         div.className = 'segment-label';
-        // Set onclick handler for each div
-        div.onclick = function() { handleSegmentClick(result[label]) }
         let textNode = document.createTextNode(label);
         div.appendChild(textNode);
+
+        // Set onclick handler for each div
+        div.onclick = function() { handleSegmentClick(result[label]) }
 
         // Append div to left side container
         leftSideContainer.appendChild(div)
     }
 }
 
-let handleSegmentClick = function(segmentsData) {
+let handleSegmentClick = function (segmentsData) {
     console.log(segmentsData);
     // Remove all child svg charts inside the right-side div
     d3.select(".right-side").selectAll('svg').remove();
     // Rebuild charts for segmentsData
     buildRightCharts(segmentsData)
-}
 
-let buildPieCharts = (platformData) => {
-    for (let platform in platformData){
-        buildPieChart(platformData[platform])
+
+
+    
+    d3.select(".middle-side").selectAll('svg').remove();
+    console.log(segmentsData)
+
+    // let platformObj = {}
+    // for (let key in segmentsData) {
+    //     let obj = segmentsData[key];
+    //     for (let platformKey in obj) {
+    //         let count = obj[platformKey];
+    //         platformObj[platformKey] = platformObj[platformKey] || 0
+    //         platformObj[platformKey] += parseInt(count)
+    //     }
+    // }
+    // buildPieChart(platformObj);
+
+
+    let subsegmentObj = {}
+    for (let subSegmentKey in segmentsData) {
+
+        let platformCounts = segmentsData[subSegmentKey];
+        let sum = 0
+        Object.values(platformCounts).forEach(count => {
+            sum += parseInt(count)
+        });
+        subsegmentObj[subSegmentKey] = sum
     }
+    buildPieChart(subsegmentObj);
 }
 
-let buildPieChart = function (platform){
-    const arcs = pie(platform);
+let buildPieChart = function (dataObj) {
+    // {
+    //     'Male voters': 124,
+    //     'Female voters': 432
+    // }
+    
+    console.log(dataObj);
+    // set the dimensions and margins of the graph
+    var width = 800,
+        height = 800,
+        margin = 40
 
-    const svg = d3.create("svg")
-        .attr("viewBox", [-width / 2, -height / 2, width, height]);
+    // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
+    var radius = Math.min(width, height) / 2 - margin
 
-    svg.append("g")
-        .attr("stroke", "white")
-        .selectAll("path")
-        .data(arcs)
-        .join("path")
-        .attr("fill", d => color(d.platform.name))
-        .attr("d", arc)
-        .append("title")
-        .text(d => `${d.platform.name}: ${d.platform.value.toLocaleString()}`);
+    // append the svg object to the div called 'my_dataviz'
+    var svg = d3.select(".middle-side")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .append("g")
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    svg.append("g")
-        .attr("font-family", "sans-serif")
-        .attr("font-size", 12)
-        .attr("text-anchor", "middle")
-        .selectAll("text")
-        .data(platform)
-        .join("text")
-        .attr("transform", d => `translate(${arcLabel.centroid(d)})`)
-        .call(text => text.append("tspan")
-            .attr("y", "-0.4em")
-            .attr("font-weight", "bold")
-            .text(d => d.platform.name))
-        .call(text => text.filter(d => (d.endAngle - d.startAngle) > 0.25).append("tspan")
-            .attr("x", 0)
-            .attr("y", "0.7em")
-            .attr("fill-opacity", 0.7)
-            .text(d => d.platform.value.toLocaleString()));
+  
+    var data = dataObj
 
-    return svg.node();
+    // set the color scale
+    var color = d3.scaleOrdinal()
+        .domain(data)
+        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"])
+
+    // Compute the position of each group on the pie:
+    var pie = d3.pie()
+        .value(function (d) { return d.value; })
+    var data_ready = pie(d3.entries(data))
+
+    var arc = d3.arc()              //this will create <path> elements for us using arc data
+        .outerRadius(radius);
+    var arcs = svg.selectAll("g.slice")     //this selects all <g> elements with class slice (there aren't any yet)
+        .data(data_ready)                          //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties) 
+        .enter()                            //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in the data array
+        .append("svg:g")                //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
+        .attr("class", "slice");    //allow us to style things in the slices (like text)
+
+    // arcs.append("svg:path")
+    //         .attr("fill", function(d, i) { return color(i); } ) //set the color for each slice to be chosen from the color function defined above
+    //         .attr("d", arc);                                    //this creates the actual SVG path using the associated data (pie) with the arc drawing function
+
+    arcs.append("svg:text")                                     //add a label to each slice
+        .attr("transform", function (d) {                    //set the label's origin to the center of the arc
+            //we have to make sure to set these before calling arc.centroid
+            d.innerRadius = 0;
+            d.outerRadius = radius;
+            return "translate(" + arc.centroid(d) + ")";        //this gives us a pair of coordinates like [50, 50]
+        })
+        .attr("text-anchor", "middle")                          //center the text on it's origin
+        .text(function (d) { return `${d.data.key} (${d.data.value})` });
+
+    // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
+    svg
+        .selectAll('whatever')
+        .data(data_ready)
+        .enter()
+        .append('path')
+        .attr('d', d3.arc()
+            .innerRadius(0)
+            .outerRadius(radius)
+        )
+        .attr('fill', function (d) { return (color(d.data.key)) })
+        .attr("stroke", "black")
+        .style("stroke-width", "2px")
+        .style("opacity", 0.7)
 }

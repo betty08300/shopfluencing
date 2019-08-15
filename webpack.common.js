@@ -30,7 +30,7 @@ module.exports = {
                         options: {
                             // you can specify a publicPath here
                             // by default it uses publicPath in webpackOptions.output
-                            publicPath: path.join(__dirname, './src'),
+                            publicPath: '../',
                             hmr: process.env.NODE_ENV === "development"
                         }
                     },
@@ -46,9 +46,8 @@ module.exports = {
                         options: {
                             // you can specify a publicPath here
                             // by default it uses publicPath in webpackOptions.output
-                            // publicPath: path.join(__dirname, './src'),
-                            // hmr: process.env.NODE_ENV === "development"
-                            includePaths: ['./css']
+                            publicPath: '../',
+                            hmr: process.env.NODE_ENV === "development",
                         }
                     },
                     "css-loader",
