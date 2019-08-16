@@ -99,6 +99,13 @@ var buildRightChart = function (title, subSegmentData) {
     x.domain(chartData.map(function (d) { return d.platformName; }));
     y.domain([0, d3.max(chartData, function (d) { return d.count; })]);
 
+    let colorsMap = {
+        'Facebook': '#98abc5',
+        'Instagram': '#8a89a6',
+        'Twitter': '#90CAF9',
+        'Snapchat': '#FFCC80',
+        'None': '#B0BEC5',
+    }
     // append the rectangles for the bar chart
     svg.selectAll(".bar")
         .data(chartData)
@@ -107,7 +114,8 @@ var buildRightChart = function (title, subSegmentData) {
         .attr("x", function (d) { return x(d.platformName); })
         .attr("width", x.bandwidth())
         .attr("y", function (d) { return y(d.count); })
-        .attr("height", function (d) { return height - y(d.count); });
+        .attr("height", function (d) { return height - y(d.count); })
+        .attr('fill', function(d) { return colorsMap[d.platformName]});
 
     // add the x Axis
     svg.append("g")
@@ -175,7 +183,7 @@ let handleSegmentClick = function (segmentsData) {
         });
         subsegmentObj[subSegmentKey] = sum
     }
-    buildPieChart(subsegmentObj);
+    PieAPI.buildPieChart(subsegmentObj);
 }
 
 // let buildPieChart = function (dataObj) {
