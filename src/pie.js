@@ -9,15 +9,15 @@ export const buildPieChart = function (dataObj) {
 
     console.log(dataObj);
     // set the dimensions and margins of the graph
-    var width = 700,
-        height = 700,
-        margin = 40
+    let width = 650,
+        height = 650,
+        margin = 50
 
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-    var radius = Math.min(width, height) / 2 - margin
+    let radius = (Math.min(width, height) - margin) / 2
 
     // append the svg object to the div called 'my_dataviz'
-    var svg = d3.select(".middle-side")
+    let svg = d3.select(".middle-side")
         .append("svg")
         .attr("width", width)
         .attr("height", height)
@@ -25,21 +25,27 @@ export const buildPieChart = function (dataObj) {
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 
-    var data = dataObj
+    let data = dataObj
 
     // set the color scale
-    var color = d3.scaleOrdinal()
+    let color = d3.scaleOrdinal()
         .domain(data)
         .range(["#98abc5", "#8a89a6", "#7b6888", "#594766", "#6981A3"])
 
     // Compute the position of each group on the pie:
-    var pie = d3.pie()
+    let pie = d3.pie()
         .value(function (d) { return d.value; })
-    var data_ready = pie(d3.entries(data))
 
-    var arc = d3.arc()              //this will create <path> elements for us using arc data
+    let data_ready = pie(d3.entries(data))
+
+    let arc = d3.arc()              //this will create <path> elements for us using arc data
         .outerRadius(radius);
-    var arcs = svg.selectAll("g.slice")     //this selects all <g> elements with class slice (there aren't any yet)
+
+    let arcLabel = d3.arc()
+        .outerRadius(radius / 4)
+        .innerRadius(radius - 5);
+
+    let arcs = svg.selectAll("g.slice")     //this selects all <g> elements with class slice (there aren't any yet)
         .data(data_ready)                          //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties) 
         .enter()                            //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in the data array
         .append("svg:g")                //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
@@ -57,12 +63,29 @@ export const buildPieChart = function (dataObj) {
     //         .attr("d", arc);                                    //this creates the actual SVG path using the associated data (pie) with the arc drawing function
 
     arcs.append("svg:text")                                     //add a label to each slice
-        .attr("transform", function (d) {                    //set the label's origin to the center of the arc
-            //we have to make sure to set these before calling arc.centroid
-            d.innerRadius = 0;
-            d.outerRadius = radius;
-            return "translate(" + arc.centroid(d) + ")";        //this gives us a pair of coordinates like [50, 50]
+        // .attr("transform", function (d) {                    //set the label's origin to the center of the arc
+        //     //we have to make sure to set these before calling arc.centroid
+        //     d.innerRadius = 0;
+        //     d.outerRadius = radius;
+        //     return "translate(" + arc.centroid(d) + ")";        //this gives us a pair of coordinates like [50, 50]
+        // })
+        .attr("transform", function (d) {
+            console.warn(d.data.key, d.startAngle, d.endAngle);
+            if(d.endAngle - d.startAngle > 2){
+                d.innerRadius = 0;
+                d.outerRadius = radius;
+                return "translate(" + arc.centroid(d) + ")";
+            }else {
+                let midAngle = d.endAngle < Math.PI ? d.startAngle / 2 + d.endAngle / 2 : d.startAngle / 2 + d.endAngle / 2 + Math.PI;
+                let midAngleDegrees = (midAngle * 57.295779513);
+    
+                if ((midAngleDegrees - 180) > 90 && (midAngleDegrees - 180) < 180) midAngleDegrees -= 180;
+                return "translate(" + arcLabel.centroid(d)[0] + ", " + arcLabel.centroid(d)[1] + ") rotate(-90) rotate(" + (midAngleDegrees) + ")";
+            }
+
+
         })
+        .attr("dy", ".35em")
         .attr("text-anchor", "middle")                          //center the text on it's origin
         .text(function (d) { return `${d.data.key} (${d.data.value})` });
 
@@ -85,13 +108,13 @@ export const buildPieChart = function (dataObj) {
 
     function tweenPie(b) {
         b.innerRadius = 0;
-        var i = d3.interpolate({ startAngle: 0, endAngle: 0 }, b);
+        let i = d3.interpolate({ startAngle: 0, endAngle: 0 }, b);
         return function (t) { return arc(i(t)); };
     }
 
     function tweenDonut(b) {
         b.innerRadius = radius * .6;
-        var i = d3.interpolate({ innerRadius: 0 }, b);
+        let i = d3.interpolate({ innerRadius: 0 }, b);
         return function (t) { return arc(i(t)); };
     }    
 }
