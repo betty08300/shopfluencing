@@ -113,10 +113,17 @@ var buildRightChart = function (title, subSegmentData) {
         .attr("class", "bar")
         .attr("x", function (d) { return x(d.platformName); })
         .attr("width", x.bandwidth())
-        .attr("y", function (d) { return y(d.count); })
-        .attr("height", function (d) { return height - y(d.count); })
+        .attr("y", function (d) { return y(0); })
+        .attr("height", function (d) { return height - y(0); })
         .attr('fill', function(d) { return colorsMap[d.platformName]});
 
+    svg.selectAll('rect')
+        .transition()
+        .duration(800)
+        .attr('y', (d) => { return y(d.count); })
+        .attr('height', (d) => {return height - y(d.count); })
+        .delay((d,i) => { return(i*80); });
+        
     // add the x Axis
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")

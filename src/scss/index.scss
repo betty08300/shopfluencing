@@ -1,11 +1,22 @@
-.container {
-    display: flex; 
+body {
+    font-family: Arial, Helvetica, sans-serif;
     background-color: rgba(190, 184, 184, 0.913);
     background-image: linear-gradient(25deg, #637bbc, #99a5d2, #ccd1e9, #ffffff);
+    color: #444;
+}
+
+h1 {
+    padding-left: 12px;
+    color: #555;
+}
+
+.container {
+    display: flex; 
+    
 }
 
 .left-side {
-    width: 20%;
+    width: 15%;
     padding: 12px;
     
     
@@ -17,17 +28,19 @@
 }
 
 .right-side {
-    width: 30%;
+    width: 35%;
     
 }
 
 .segment-label {
-    background: rgb(205, 204, 206);
+    background: rgb(138, 137, 166);
     border-radius: 50px;
-    color: #444;
+    color: #FFF;
     margin-bottom: 12px;
     padding: 12px;
     text-align: center;
+    font-size: 0.8em;
+    font-weight: 600;
 }
 
 .bar {
