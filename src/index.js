@@ -38,6 +38,8 @@ d3.csv('./dist/shopfluencing.csv').then(dataArr => {
 
 })
 
+// window.addEventListener('resize', )
+
 let buildRightCharts = (segmentsData) => {
     // {
     //     'Male voters': {fb: 10, ig:20},
@@ -52,10 +54,12 @@ let buildRightCharts = (segmentsData) => {
 }
 
 var buildRightChart = function (title, subSegmentData) {
-    // set the dimensions and margins of the graph
+    // set the dimensions and margins of the 
+    let w = window.innerWidth * 0.25
+    let h = w / 1.6666667
     var margin = { top: 20, right: 20, bottom: 30, left: 40 },
-        width = 300 - margin.left - margin.right,
-        height = 180 - margin.top - margin.bottom;
+        width = w - margin.left - margin.right,
+        height = h - margin.top - margin.bottom;
 
     // set the ranges
     var x = d3.scaleBand()
@@ -184,6 +188,10 @@ let handleSegmentClick = function (segmentsData) {
         subsegmentObj[subSegmentKey] = sum
     }
     PieAPI.buildPieChart(subsegmentObj);
+}
+
+function resizeFunction() {
+
 }
 
 // let buildPieChart = function (dataObj) {

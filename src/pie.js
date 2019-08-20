@@ -9,8 +9,8 @@ export const buildPieChart = function (dataObj) {
 
     console.log(dataObj);
     // set the dimensions and margins of the graph
-    let width = 650,
-        height = 650,
+    let width = window.innerWidth/2,
+        height = window.innerWidth/2,
         margin = 50
 
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
@@ -70,7 +70,7 @@ export const buildPieChart = function (dataObj) {
         //     return "translate(" + arc.centroid(d) + ")";        //this gives us a pair of coordinates like [50, 50]
         // })
         .attr("transform", function (d) {
-            console.warn(d.data.key, d.startAngle, d.endAngle);
+            // console.warn(d.data.key, d.startAngle, d.endAngle);
             if(d.endAngle - d.startAngle > 2){
                 d.innerRadius = 0;
                 d.outerRadius = radius;
