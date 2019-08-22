@@ -30,7 +30,9 @@ export const buildPieChart = function (dataObj) {
     // set the color scale
     let color = d3.scaleOrdinal()
         .domain(data)
-        .range(["#98abc5", "#8a89a6", "#7b6888", "#594766", "#6981A3"])
+        .range(['#574da0', '#6d68ab', '#8583ba', '#a6a6ce', '#bba7ce', '#a083ba', '#8c68aa', '#7c4da1', '#74479b'])
+        // .range(['#8E8BE0', '#6A66CB', '#4C48B4', '#713EAF', '#8D5DC7', '#AC84DD', '#81B0DA', '#5990C2', '#3A74A8'])
+        // .range(["#98abc5", "#8a89a6", "#7b6888", "#594766", "#6981A3"])
 
     // Compute the position of each group on the pie:
     let pie = d3.pie()

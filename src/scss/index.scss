@@ -6,10 +6,30 @@ body {
     font-size: 12px;
 }
 
-h1 {
-    padding-left: 12px;
-    color: #555;
+.description {
+    padding-left: 40px;
+    h1 {
+        color: #555;
+    }
+    p {
+        font-size: 1.2em;
+        line-height: 1.4;
+        color: #444;
+        width: 60%;
+    }
+
+    .description-bg {
+        width: 60%;
+        background: #00000010;
+        padding: 1px 16px;
+        border-radius: 3px;
+
+        p {
+            width: 100%;
+        }
+    }
 }
+
 
 .container {
     display: flex; 
@@ -34,7 +54,7 @@ h1 {
 }
 
 .segment-label {
-    background: rgb(138, 137, 166);
+    background:rgb(109, 104, 171);
     border-radius: 50px;
     color: #FFF;
     margin-bottom: 12px;

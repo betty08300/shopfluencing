@@ -26,13 +26,22 @@ d3.csv('./dist/shopfluencing.csv').then(dataArr => {
     // Build left side with segments
     buildLeftSide(result);
 
-    let startingData = result['Gender'];
+    let startingData = result['All Users'];
     // console.log(startingData);
 
     // Build right side charts
     buildRightCharts(startingData)
 
-    PieAPI.buildPieChart(startingData['Male voters'])
+    let subsegmentObj = {}
+    for (let subSegmentKey in startingData) {
+        let platformCounts = startingData[subSegmentKey];
+        let sum = 0
+        Object.values(platformCounts).forEach(count => {
+            sum += parseInt(count)
+        });
+        subsegmentObj[subSegmentKey] = sum
+    }
+    PieAPI.buildPieChart(subsegmentObj)
 
     GraphApI.buildgraph(result)
 
