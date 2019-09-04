@@ -67,3 +67,21 @@ body {
 .bar {
     background: #BBDEFB;
 }
+
+.right-footer {
+    display: flex; 
+    justify-content: flex-end;
+    padding-right: 40px;
+    padding-bottom: 20px;
+
+   a {
+        margin-left: 15px;
+        color: rgb(66, 62, 114);
+        font-size: 15px;
+
+        &:hover {
+            color: #312b5a;
+        }
+   }
+
+}
