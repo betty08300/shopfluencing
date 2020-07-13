@@ -1,5 +1,7 @@
 # Shopfluencing
 
+[Live](http://bettywren.com/shopfluencing/)
+
 ## Background and Overview
 Shopping online is becoming a bigger and bigger habit in our lives. The influence of social media advertising has ever increasing importance, especially amongst the millennial generation. 
 This dataset helps visualize which social media platform has the greatest influence on online shopping decisions by different demographics. 
